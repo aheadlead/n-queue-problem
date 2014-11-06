@@ -8,6 +8,7 @@
 int chessboard[MAXN]={0};
 int N;
 int solution_total = 0;
+int row_available[MAXN]={0};
 
 int is_vaild(int current_queen)
 {
@@ -33,10 +34,15 @@ void place_queen(int queen_number)
     for (row=0; row<N; ++row)
     {
         // 将第queen_number号皇后摆到棋盘的row行queen_number列
-        chessboard[queen_number] = row;
-        if (is_vaild(queen_number)) // 判断当前局面下queen_number号皇后与之前的换后是否有冲突
+        if (row_available[row] == 0)
         {
-            place_queen(queen_number+1); // 放置下一个皇后
+            row_available[row] = 1;
+            chessboard[queen_number] = row;
+            if (is_vaild(queen_number)) // 判断当前局面下queen_number号皇后与之前的换后是否有冲突
+            {
+                place_queen(queen_number+1); // 放置下一个皇后
+            }
+            row_available[row] = 0;
         }
     }
 }
