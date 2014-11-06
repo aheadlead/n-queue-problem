@@ -3,7 +3,7 @@
 #define false 0
 #define true 1
 
-#define ABS(x) ((x)>0?(x):-(x))
+#define ABS(x) ((x)>0?(x):-(x)) // ABS(x) 返回x的绝对值
 
 int chessboard[MAXN]={0};
 int N;
@@ -18,9 +18,9 @@ int is_valid()
     {
         for (queen2=0; queen2<queen1; ++queen2)
         {
-            if (chessboard[queen1] == chessboard[queen2])
+            if (chessboard[queen1] == chessboard[queen2]) // 横向冲突
                 return false;
-            if (ABS(chessboard[queen1]-chessboard[queen2]) == ABS(queen1-queen2))
+            if (ABS(chessboard[queen1]-chessboard[queen2]) == ABS(queen1-queen2)) // 斜向冲突
                 return false;
         }
     }
