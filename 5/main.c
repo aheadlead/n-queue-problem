@@ -9,16 +9,7 @@ int chessboard[MAXN]={0};
 int N;
 int solution_total = 0;
 int row_available[MAXN]={0};
-
-int is_vaild(int current_queen)
-{
-    int queen;
-    for (queen=0; queen<current_queen; ++queen)
-        if (chessboard[queen] == chessboard[current_queen] || 
-                ABS(chessboard[queen]-chessboard[current_queen]) == ABS(queen-current_queen))
-            return false;
-    return true;
-}
+int rdiag_available[MAXN+MAXN-1]={0}, ldiag_available[MAXN+MAXN-1]={0};
 
 // 把第queen_number号皇后摆到棋盘上去
 void place_queen(int queen_number)
@@ -33,16 +24,20 @@ void place_queen(int queen_number)
     // 枚举新皇后的位置
     for (row=0; row<N; ++row)
     {
-        // 将第queen_number号皇后摆到棋盘的row行queen_number列
-        if (row_available[row] == 0)
+        if (row_available[row] == 0 && 
+                rdiag_available[row-queen_number+N-1] == 0 &&   // 右下对角线方向 
+                ldiag_available[row+queen_number] == 0) // 左下对角线方向
         {
             row_available[row] = 1;
-            chessboard[queen_number] = row;
-            if (is_vaild(queen_number)) // 判断当前局面下queen_number号皇后与之前的换后是否有冲突
-            {
-                place_queen(queen_number+1); // 放置下一个皇后
-            }
+            rdiag_available[row-queen_number+N-1] = 1;
+            ldiag_available[row+queen_number] = 1;
+            chessboard[queen_number] = row; // 将第queen_number号皇后摆到棋盘的row行queen_number列
+            
+            place_queen(queen_number+1); // 放置下一个皇后
+            
             row_available[row] = 0;
+            rdiag_available[row-queen_number+N-1] = 0;
+            ldiag_available[row+queen_number] = 0;
         }
     }
 }
