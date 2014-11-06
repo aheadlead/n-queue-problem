@@ -9,22 +9,13 @@ int chessboard[MAXN]={0};
 int N;
 int solution_total = 0;
 
-// 判断当前局面是否合法
-int is_valid()
+int is_vaild(int current_queen)
 {
-    int queen1, queen2;
-
-    for (queen1=0; queen1<N; ++queen1)
-    {
-        for (queen2=0; queen2<queen1; ++queen2)
-        {
-            if (chessboard[queen1] == chessboard[queen2]) // 横向冲突
-                return false;
-            if (ABS(chessboard[queen1]-chessboard[queen2]) == ABS(queen1-queen2)) // 斜向冲突
-                return false;
-        }
-    }
-
+    int queen;
+    for (queen=0; queen<current_queen; ++queen)
+        if (chessboard[queen] == chessboard[current_queen] || 
+                ABS(chessboard[queen]-chessboard[current_queen]) == ABS(queen-current_queen))
+            return false;
     return true;
 }
 
@@ -35,18 +26,18 @@ void place_queen(int queen_number)
     if (queen_number == N)
     {
         // 如果已经摆了N个皇后
-        // 就判断当前局面是否合法
-        if (is_valid())
-            solution_total = solution_total+1;
+        solution_total = solution_total+1;
         return;
     }
     // 枚举新皇后的位置
     for (row=0; row<N; ++row)
     {
-        // 将第queen_number号皇后摆到棋盘的row行column列
+        // 将第queen_number号皇后摆到棋盘的row行queen_number列
         chessboard[queen_number] = row;
-        // 放置下一个皇后
-        place_queen(queen_number+1);
+        if (is_vaild(queen_number)) // 判断当前局面下queen_number号皇后与之前的换后是否有冲突
+        {
+            place_queen(queen_number+1); // 放置下一个皇后
+        }
     }
 }
 
